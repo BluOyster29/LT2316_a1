@@ -14,7 +14,8 @@ def get_args():
 
 def get_files_from_folder(folder):
 	files = os.listdir(folder)
-	return folder+files[0], folder+files[1], folder+files[2], folder+files[4], folder+files[5]
+
+	return folder+files[0], folder+files[1], folder+files[2], folder+files[3], folder+files[4]
 
 def get_languages(csv_file, preset):
 	with open(csv_file, 'r') as csv_File: #opens csv containing language codes and their names
@@ -87,7 +88,7 @@ def output_data(x, y, filename):
 
 def get_data_main():
 	args = get_args()
-	x_train, labels, y_train,x_test,y_test = get_files_from_folder(args.folder)
+	labels, x_test, x_train,y_test,y_train = get_files_from_folder(args.folder)
 	language_names = get_languages(labels, args.preset) #arg
 	language_codes = [i[1] for i in language_names]
 	x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
