@@ -88,7 +88,7 @@ def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size):
 			y = y.to(device)
 			optimizer.zero_grad()
 			h = h.data
-			out, h = model(x, h, device)
+			out, h = model(x, h)
 			loss = criterion(out, y.long())
 			loss.backward()
 			epoch_loss.append(loss.item())
