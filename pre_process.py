@@ -4,7 +4,6 @@ from os import listdir
 from torch.nn.utils.rnn import pad_sequence
 from LangIdentDataset import RTDataset
 from torch.utils.data import DataLoader
-<<<<<<< HEAD
 from config import CONFIG, update_config
 
 def get_args():
@@ -16,11 +15,9 @@ def get_args():
                         help="Define the batch size for training")
     args = parser.parse_args()
     return args
-=======
 import pickle
 import get_data
 import gzip
->>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
 
 def load_csv(file_path):
 
@@ -130,8 +127,8 @@ def output_dataloaders(loaders):
 =======
     training = 'dataloaders/training_dataloader.pkl'
     testing = 'dataloaders/testing_dataloader.pkl'
-   
-    
+
+
     for i in zip([training, testing], loaders):
 >>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
         print('Pickling Dataloader {}'.format(str(i[0])))
@@ -196,6 +193,6 @@ def output_vocab(vocab):
     with open('{}vocab.pkl'.format(directory), 'wb') as file:
         pickle.dump(vocab, file)
         file.close()
-        
+
 if __name__ == '__main__':
     pre_process_main()
