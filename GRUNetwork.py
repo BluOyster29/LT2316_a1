@@ -14,7 +14,7 @@ class RNN_GRU(nn.Module):
                           num_layers=self.num_layers, batch_first=True, dropout=dropout).to(device)
         self.fc = nn.Linear(hidden_size * seq_len, output_size).to(device)
 
-    def forward(self, sequence, hidden_layer, device):
+    def forward(self, sequence, hidden_layer):
         output = self.emb(sequence).to(device)
         hidden_layer = hidden_layer.to(self.device)
         output, hidden_layer = self.gru(output, hidden_layer)
