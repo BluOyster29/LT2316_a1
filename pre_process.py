@@ -120,17 +120,14 @@ def output_dataloaders(loaders):
     if os.path.exists(directory) == False:
         os.mkdir(directory)
 
-<<<<<<< HEAD
     training = 'dataloaders/training_dataloader.zip'
     testing = 'dataloaders/testing_dataset.zip'
     for i in zip([training,testing], loaders):
-=======
     training = 'dataloaders/training_dataloader.pkl'
     testing = 'dataloaders/testing_dataloader.pkl'
 
 
     for i in zip([training, testing], loaders):
->>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
         print('Pickling Dataloader {}'.format(str(i[0])))
         file = gzip.GzipFile(i[0], 'wb')
         file.write(pickle.dumps(i[1], 1))
@@ -160,12 +157,9 @@ def pre_process_main():
     if os.path.exists(dir) == False:
         os.mkdir(dir)'''
     print('Loading Csvs')
-<<<<<<< HEAD
     x_train, y_train, x_test, y_test, language_codes = load_csv(args.folder)
-=======
     directory = 'data/pre_processed/'
     x_train, y_train, x_test, y_test, language_codes = load_csv(directory)
->>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
     print('Building Vocab')
     vocab = build_vocab(x_train)
     output_vocab(vocab)
