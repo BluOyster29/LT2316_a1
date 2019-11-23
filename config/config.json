@@ -1,0 +1,10 @@
+{
+   "batch_size": 0,
+   "device": "cuda:01",
+   "hidden_size": 0,
+   "input_size": 100,
+   "number_layers": 0,
+   "output_size": 10,
+   "sequence_length": 100,
+   "vocab_size": 0
+}
