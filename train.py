@@ -82,7 +82,6 @@ def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size):
 
 		for (x,y) in train_loader:
 			progress(count, total, status='trainings')
-			print(count)
 			count +=1
 			x = x.to(device)
 			y = y.to(device)
@@ -94,7 +93,7 @@ def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size):
 			epoch_loss.append(loss.item())
 			optimizer.step()
 			#print('Loss per timestep = {}'.format(loss.item()))
-			progress(count, total, status='training')
+		progress(count, total, status='training')
 		avg_loss = sum(epoch_loss) / len(epoch_loss)
 		print("Average loss at epoch %d: %.7f" % (epoch_nr, avg_loss))
 
