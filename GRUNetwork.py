@@ -22,7 +22,7 @@ class RNN_GRU(nn.Module):
                                           len(sequence[0]))
         output = self.fc(output).to(device)
 
-return output, hidden_layer
+        return output, hidden_layer
     def forward(self, sequence, hidden_layer):
         output = self.emb(sequence)
         output, hidden_layer = self.gru(output, hidden_layer)
