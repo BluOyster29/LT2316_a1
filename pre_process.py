@@ -1,13 +1,26 @@
 import pandas as pd
-import os
+import os, pickle, get_data, argparse, gzip, torch
 from os import listdir
 from torch.nn.utils.rnn import pad_sequence
 from LangIdentDataset import RTDataset
-import torch
 from torch.utils.data import DataLoader
+<<<<<<< HEAD
+from config import CONFIG, update_config
+
+def get_args():
+    parser = argparse.ArgumentParser(
+        description="Pre Processing")
+    parser.add_argument("-F", "--Folder", dest='folder', type=str, default="data/pre_processed/",
+                        help="Folder containing outputted csv files")
+    parser.add_argument("-B", "--batch_size", dest='batch_size', type=int, default=1,
+                        help="Define the batch size for training")
+    args = parser.parse_args()
+    return args
+=======
 import pickle
 import get_data
-import zipfile
+import gzip
+>>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
 
 def load_csv(file_path):
 
@@ -90,6 +103,9 @@ def output_postprocessed(train_dataset,test_dataset):
     dir = 'data/postprocessed/'
     if os.path.exists(dir) == False:
         os.mkdir(dir)
+    directory = 'data/postprocessed/'
+    if os.path.exists(directory) == False:
+        os.mkdir(directory)
 
     pd.DataFrame.to_csv(pd.DataFrame({'Encoded Language Example' : [i[0] for i in train_dataset],
                            'Language Index' : [i[1] for i in train_dataset]}), 'data/postprocessed/post_processed_training.csv')
@@ -99,35 +115,63 @@ def output_postprocessed(train_dataset,test_dataset):
 
 def output_dataloaders(loaders):
 
-    '''
+    '''''
     Outputting Dataloaders to be used in training and testing
     '''
 
     directory = 'dataloaders/'
-    if os.path.exists(dir) == False:
-        os.mkdir(dir)
+    if os.path.exists(directory) == False:
+        os.mkdir(directory)
 
+<<<<<<< HEAD
     training = 'dataloaders/training_dataloader.zip'
-    testing = 'dataloaders/testing_dataloader.zip'
+    testing = 'dataloaders/testing_dataset.zip'
     for i in zip([training,testing], loaders):
+=======
+    training = 'dataloaders/training_dataloader.pkl'
+    testing = 'dataloaders/testing_dataloader.pkl'
+   
+    
+    for i in zip([training, testing], loaders):
+>>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
         print('Pickling Dataloader {}'.format(str(i[0])))
         file = gzip.GzipFile(i[0], 'wb')
         file.write(pickle.dumps(i[1], 1))
         file.close()
+        with open(i[0], 'wb') as file:
+            pickle.dump(i[1], file)
 
-    return 'Done'
+    return 'Done'''
+
+def save_dataloaders(train_loader, test_loader):
+    directory = 'dataloaders/'
+    if os.path.exists(directory) == False:
+        os.mkdir(directoy)
+
+    train = 'training_loader.pkl'
+    test = 'test_dataset.pkl'
+
+    for i in zip([train_loader, test_loader], [train,test]):
+        with open(directory+i[1], 'wb') as file:
+            pickle.dump(i[0],file)
 
 def pre_process_main():
+    args = get_args()
     '''
     x_train, y_train, vocab, int2char, x_test, y_test = get_data.get_data_main()
     dir = 'data/pre_processed/'
     if os.path.exists(dir) == False:
         os.mkdir(dir)'''
     print('Loading Csvs')
-    dir = 'data/pre_processed/'
-    x_train, y_train, x_test, y_test, language_codes = load_csv(dir)
+<<<<<<< HEAD
+    x_train, y_train, x_test, y_test, language_codes = load_csv(args.folder)
+=======
+    directory = 'data/pre_processed/'
+    x_train, y_train, x_test, y_test, language_codes = load_csv(directory)
+>>>>>>> 7c46f5104ff2c97d1d276d29b36a8c19677b72a9
     print('Building Vocab')
     vocab = build_vocab(x_train)
+    output_vocab(vocab)
     lang2int = langencoder(language_codes)
     print('Preprocessing training data')
     train_data, train_labels = build_data(x_train, y_train, lang2int, vocab)
@@ -135,13 +179,23 @@ def pre_process_main():
     test_data, test_labels = build_data(x_test, y_test, lang2int, vocab)
     train_dataset = RTDataset(train_data, train_labels)
     test_dataset = RTDataset(test_data, test_labels)
-    batch_size = int(input('Enter Batch Size(int)'))
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+    CONFIG['batch_size'] = args.batch_size
+    update_config(CONFIG)
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
     print('Outputting dataloaders')
+    save_dataloaders(train_loader,test_dataset)
     #output_postprocessed(train_dataset, test_dataset)
-    output_dataloaders([train_loader,test_loader])
+    #output_dataloaders([train_loader,test_dataset])
     print('Done!')
 
+def output_vocab(vocab):
+    directory = 'vocab/'
+    if os.path.exists(directory) == False:
+        os.mkdir(directory)
+    print('Outputting vocab to {}'.format(directory+'vocab.pkl'))
+    with open('{}vocab.pkl'.format(directory), 'wb') as file:
+        pickle.dump(vocab, file)
+        file.close()
+        
 if __name__ == '__main__':
     pre_process_main()

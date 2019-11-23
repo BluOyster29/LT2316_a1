@@ -1,6 +1,20 @@
 import pandas as pd
-import csv
-import os
+import csv, os, argparse
+
+def get_args():
+    parser = argparse.ArgumentParser(
+        description="")
+    parser.add_argument("-P", "--preset", dest='preset', type=str,
+                        help="Choose to use default language set or your own", default="y")
+
+    parser.add_argument("-F", "--Folder", dest='folder', type=str, default="data/raw/",
+                        help="Directory that contains training data")
+    args = parser.parse_args()
+    return args
+
+def get_files_from_folder(folder):
+    files = os.listdir(folder)
+    return folder+files[0], folder+files[1], folder+files[2], folder+files[4], folder+files[5]
 
 def get_languages(csv_file, preset):
     with open(csv_file, 'r') as csv_File: #opens csv containing language codes and their names
@@ -25,10 +39,10 @@ def get_languages(csv_file, preset):
                 print("You've already said that one! ")
             elif language in language_table:
                 languages.append(language)
-                print(languages)
+                print(' '.join(languages))
             else:
                 print('Language not recognised. Please refer to language labels')
-                print(languages)
+                print(' '.join(languages))
                 continue
         language_codes = [language_table[i] for i in language_table if i in languages] #collects languages from predetermined set,
         language_names =  [(key, value) for key, value in language_table.items() if value in language_codes] #dictionary mapping code to name
@@ -72,19 +86,15 @@ def output_data(x, y, filename):
     pd.DataFrame.to_csv(output, dir+filename)
 
 def get_data_main():
-    language_names = get_languages('data/raw/labels.csv', 'y')
+    args = get_args()
+    x_train, labels, y_train,x_test,y_test = get_files_from_folder(args.folder)
+    language_names = get_languages(labels, args.preset) #arg
     language_codes = [i[1] for i in language_names]
-    x_train = 'data/raw/x_train.txt'
-    y_train = 'data/raw/y_train.txt'
-    x_test = 'data/raw/x_test.txt'
-    y_test = 'data/raw/y_test.txt'
     x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
     x_test, y_test = gen_data(x_test, y_test, language_codes, training=False)
     output_data(x_train,y_train, 'Training_data.csv')
     output_data(x_train,y_train, 'Testing_data.csv')
-
     return x_train, y_train, vocab, int2char, x_test, y_test
 
 if __name__ == '__main__':
-
-    main()
+    get_data_main()
