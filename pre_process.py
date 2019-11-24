@@ -140,7 +140,7 @@ def output_dataloaders(loaders):
 def save_dataloaders(train_loader, test_loader):
     directory = 'dataloaders/'
     if os.path.exists(directory) == False:
-        os.mkdir(directoy)
+        os.mkdir(directory)
 
     train = 'training_loader.pkl'
     test = 'test_dataset.pkl'
