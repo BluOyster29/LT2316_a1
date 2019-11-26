@@ -1,10 +1,9 @@
 import pandas as pd
-import os, pickle, get_data, argparse, gzip, torch
+import os, pickle, get_data, argparse, gzip, torch, config
 from os import listdir
 from torch.nn.utils.rnn import pad_sequence
 from LangIdentDataset import RTDataset
 from torch.utils.data import DataLoader
-from config import CONFIG, update_config
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -149,13 +148,20 @@ def save_dataloaders(train_loader, test_loader):
         with open(directory+i[1], 'wb') as file:
             pickle.dump(i[0],file)
 
-def pre_process_main():
-    args = get_args()
-    '''
-    x_train, y_train, vocab, int2char, x_test, y_test = get_data.get_data_main()
-    dir = 'data/pre_processed/'
-    if os.path.exists(dir) == False:
-        os.mkdir(dir)'''
+def output_vocab(vocab):
+    directory = 'vocab/'
+    if os.path.exists(directory) == False:
+        os.mkdir(directory)
+    print('Outputting vocab to {}'.format(directory+'vocab.pkl'))
+    with open('{}vocab.pkl'.format(directory), 'wb') as file:
+        pickle.dump(vocab, file)
+        file.close()
+        
+def main(args, x_train, y_train, vocab, int2char, x_test, y_test):
+    
+    directory = 'data/pre_processed/'
+    if os.path.exists(directory) == False:
+        os.mkdir(directory)
     print('Loading Csvs')
     x_train, y_train, x_test, y_test, language_codes = load_csv(args.folder)
     directory = 'data/pre_processed/'
@@ -170,23 +176,18 @@ def pre_process_main():
     test_data, test_labels = build_data(x_test, y_test, lang2int, vocab)
     train_dataset = RTDataset(train_data, train_labels)
     test_dataset = RTDataset(test_data, test_labels)
+    CONFIG = config.get_config('config/config.json')
     CONFIG['batch_size'] = args.batch_size
-    update_config(CONFIG)
+    CONFIG['vocab_size'] = len(vocab)
+    config.update_config(CONFIG)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+    test_dataloader = DataLoader(test_dataset, batch_size=100, shuffle=False)
     print('Outputting dataloaders')
-    save_dataloaders(train_loader,test_dataset)
+    save_dataloaders(train_loader,test_dataloader)
     #output_postprocessed(train_dataset, test_dataset)
     #output_dataloaders([train_loader,test_dataset])
     print('Done!')
 
-def output_vocab(vocab):
-    directory = 'vocab/'
-    if os.path.exists(directory) == False:
-        os.mkdir(directory)
-    print('Outputting vocab to {}'.format(directory+'vocab.pkl'))
-    with open('{}vocab.pkl'.format(directory), 'wb') as file:
-        pickle.dump(vocab, file)
-        file.close()
-
 if __name__ == '__main__':
-    pre_process_main()
+    args = get_args()
+    pre_process_main(args)
