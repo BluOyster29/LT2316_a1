@@ -1,13 +1,13 @@
 import os, torch, pickle, torch, config
 from torch.utils.data import DataLoader, Dataset
-from LangIdentDataset import RTDataset 
+from LangIdentDataset import RTDataset
 import stats
 from GRUNetwork import RNN_GRU
 
 def langencoder(language_codes):
     one_hot_lang = {}
     lang2int = {lang : (num) for num, lang in dict(enumerate(language_codes)).items()}
-  
+
     return lang2int
 
 def load_model(path, config):
@@ -19,9 +19,9 @@ def load_model(path, config):
     print(model)
     with open(path+model, 'rb') as input_model:
         data = torch.load(input_model)
-    trained_model = RNN_GRU(vocab_size=config['vocab_size'], seq_len=100, input_size=100, 
+    trained_model = RNN_GRU(vocab_size=config['vocab_size'], seq_len=100, input_size=100,
                hidden_size=256, num_layers=2, output_size=10, device=device, dropout=0.0)
-    trained_model.load_state_dict(data)    
+    trained_model.load_state_dict(data)
     return trained_model
 
 def get_vocab(path):
@@ -33,7 +33,7 @@ def get_test_loader(path):
     loaders = os.listdir(path)
     with open(path+loaders[1], 'rb') as file:
         testing_loader = pickle.load(file)
-        
+
     return testing_loader
 
 def test_model(trained_model, test_data, language_stats, device, language_names_dict, int2lang):
@@ -56,8 +56,8 @@ def test_model(trained_model, test_data, language_stats, device, language_names_
             prediction = trained_model(examples[0].unsqueeze(0).to(device), hidden_layer)
             _, indeces = torch.max(prediction[0].data, dim=1)
             characters = len(torch.nonzero(examples[0]))
-            
-            
+
+
             if indeces[0].item() == examples[1].item():
                 num_characters.append(characters)
                 correct_per_example += 1
@@ -68,11 +68,11 @@ def test_model(trained_model, test_data, language_stats, device, language_names_
                 stats.update_stats(language_stats, indeces[0].item(), examples[1].item(), int2lang, characters, language_names_dict)
                 incorrect_guesses_per_instance += 1
                 continue
-                
+
         if count % tenp == 0:
             percent += 10
             print('Accuracy after {}% tested: {}'.format(percent, (correct_per_example / example * 100)))
-    
+
     return language_stats
 
 def main():
@@ -93,10 +93,6 @@ def main():
     language_stats = stats.gen_empty_stats(int2lang, language_names_dict)
     language_stats = test_model(trained_model, test_data, language_stats, device, language_names_dict, int2lang)
     evaluation = stats.further_analysis(language_stats, language_names,int2lang, language_names_dict)
-    
-    
-
-
 
 if __name__ == '__main__':
     main()

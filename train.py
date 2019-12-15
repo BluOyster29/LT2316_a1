@@ -9,7 +9,7 @@ import sys,json
 def get_args():
     parser = argparse.ArgumentParser(
         description="Training")
-    
+
     parser.add_argument("-E", "--nr_epochs", dest='nr_epochs', type=int,
                         default=2, help="Define the number of training epochs")
     parser.add_argument("-G", "--use_gpu", dest='use_gpu', type=str,
@@ -46,9 +46,9 @@ def get_vocab(path):
     with open(path+'vocab.pkl', 'rb')as file:
         vocab = pickle.load(file)
     return vocab
-      
+
 def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size, loss_mode):
-    
+
     criterion = nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=0.001)
     model.train()
@@ -77,22 +77,22 @@ def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size, los
             elif loss_mode == 2:
                 continue
             elif loss_mode == 3:
-                continue 
+                continue
             loss.backward()
             epoch_loss.append(loss.item())
             optimizer.step()
             if count % tenp == 0:
                 percent += 10
                 print("Training {}% complete".format(round(percent,1)))
-        
+
         avg_loss = sum(epoch_loss) / len(epoch_loss)
         print("Average loss at epoch %d: %.7f" % (epoch_nr, avg_loss))
-    return model        
+    return model
 
 def print_config(config):
     print('Training using the following configuartion')
     print(config)
-    
+
 def main(args):
     loss_mode = args.loss_mode
     CONFIG = config.get_config('config/config.json')
@@ -100,7 +100,7 @@ def main(args):
         device = 'cuda:1'
     else:
         device = 'cpu'
-        
+
     CONFIG['device'] = device
     config.update_config(CONFIG)
     vocab_size = len(get_vocab('vocab/'))
@@ -113,10 +113,11 @@ def main(args):
                    device=torch.device(device), dropout=0.0)
     print('Model Generated')
     nr_of_epochs = args.nr_epochs
-    print('Training Model with {} batches over {} epochs using loss mode on {} 1'.format(batch_size,nr_of_epochs, device))
+    print('Training Model with {} batches over {} epochs using loss mode {} on {}'.format(batch_size,nr_of_epochs, device))
     trained_model = train(model, training, vocab_size, device, nr_of_epochs, batch_size, loss_mode)
     print('Model Trained')
     save_model(model,batch_size,nr_of_epochs)
+
 if __name__ == '__main__':
     args = get_args()
     main(args)

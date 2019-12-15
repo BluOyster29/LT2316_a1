@@ -14,9 +14,6 @@ def get_args():
                         help="Define the batch size for training")
     args = parser.parse_args()
     return args
-import pickle
-import get_data
-import gzip
 
 def load_csv(file_path):
 
@@ -156,9 +153,9 @@ def output_vocab(vocab):
     with open('{}vocab.pkl'.format(directory), 'wb') as file:
         pickle.dump(vocab, file)
         file.close()
-        
+
 def main(args, x_train, y_train, vocab, int2char, x_test, y_test):
-    
+
     directory = 'data/pre_processed/'
     if os.path.exists(directory) == False:
         os.mkdir(directory)

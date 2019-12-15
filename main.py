@@ -18,16 +18,13 @@ def get_args():
                         help='Use GPU or CPU for training (y/n)', default="y")
     parser.add_argument("-L", "--loss_mode", dest='loss_mode', type=int,
                         help='Choose loss mode', default="1")
-    
+
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
     args = get_args()
-    x_train, y_train, vocab, int2char, x_test, y_test = get_data.main(args) 
+    x_train, y_train, vocab, int2char, x_test, y_test = get_data.main(args)
     pre_process.main(args, x_train, y_train, vocab, int2char, x_test, y_test)
     train.main(args)
     test.main()
-    
-    
-    
