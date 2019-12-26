@@ -1,8 +1,20 @@
-import os, torch, pickle, torch, config
+import os, torch, pickle, torch, config, argparse,stats
 from torch.utils.data import DataLoader, Dataset
 from LangIdentDataset import RTDataset
-import stats
+from tqdm import tqdm
 from GRUNetwork import RNN_GRU
+
+def get_args(): 
+    parser = argparse.ArgumentParser(
+        description="")
+    parser.add_argument("-M", "--trained_model", dest='model_name', type=str,
+                        help="select trained model")
+    parser.add_argument("-T", "--test_data", dest='test_data', type=str, 
+                        help="test dataset")
+    parser.add_argument("-N", "--model_name", dest='model_name', type=str, 
+                        help="test dataset")
+    args = parser.parse_args()
+    return args
 
 def langencoder(language_codes):
     one_hot_lang = {}
@@ -11,13 +23,12 @@ def langencoder(language_codes):
     return lang2int
 
 def load_model(path, config):
-    model = os.listdir(path)[0]
+    model = path
     if config['device'] == 'gpu':
         device = torch.device('cuda:01')
     else:
         device = torch.device('cpu')
-    print(model)
-    with open(path+model, 'rb') as input_model:
+    with open(path, 'rb') as input_model:
         data = torch.load(input_model)
     trained_model = RNN_GRU(vocab_size=config['vocab_size'], seq_len=100, input_size=100,
                hidden_size=256, num_layers=2, output_size=10, device=device, dropout=0.0)
@@ -30,8 +41,8 @@ def get_vocab(path):
     return vocab
 
 def get_test_loader(path):
-    loaders = os.listdir(path)
-    with open(path+loaders[1], 'rb') as file:
+    
+    with open(path, 'rb') as file:
         testing_loader = pickle.load(file)
 
     return testing_loader
@@ -46,7 +57,7 @@ def test_model(trained_model, test_data, language_stats, device, language_names_
     tenp = 500
     num_characters = []
     count = 0
-    for x, y in test_data:
+    for x, y in tqdm(test_data):
         batch_nr +=1
         example +=1
         hidden_layer = trained_model.init_hidden(1).to(device)
@@ -64,15 +75,18 @@ def test_model(trained_model, test_data, language_stats, device, language_names_
                 stats.update_stats(language_stats, indeces[0].item(), examples[1].item(), int2lang, characters, language_names_dict)
                 break
             else:
-                characters = 0
+                #characters = 0
                 stats.update_stats(language_stats, indeces[0].item(), examples[1].item(), int2lang, characters, language_names_dict)
                 incorrect_guesses_per_instance += 1
                 continue
 
-        if count % tenp == 0:
-            percent += 10
-            print('Accuracy after {}% tested: {}'.format(percent, (correct_per_example / example * 100)))
-
+  
+    
+    print(example)
+    print(correct_per_example)
+    print(incorrect_guesses_per_instance)
+    print(count)
+    
     return language_stats
 
 def main():
@@ -86,13 +100,14 @@ def main():
     language_names = CONFIG['languages']
     lang2int = langencoder(language_codes)
     int2lang = {num : lang for lang, num in lang2int.items()}
-    vocab = get_vocab('vocab/')
-    trained_model = load_model('trained_models/', CONFIG).to(device)
-    test_data = get_test_loader('dataloaders/')
+    vocab = get_vocab('vocab/{}_'.format(args.model_name))
+    trained_model = load_model('trained_models/{}.pt'.format(args.model_name), CONFIG).to(device)
+    test_data = get_test_loader('dataloaders/{}_test_dataset.pkl'.format(args.model_name))
     language_names_dict = {i[1] : i[0] for i in language_names}
     language_stats = stats.gen_empty_stats(int2lang, language_names_dict)
     language_stats = test_model(trained_model, test_data, language_stats, device, language_names_dict, int2lang)
     evaluation = stats.further_analysis(language_stats, language_names,int2lang, language_names_dict)
 
 if __name__ == '__main__':
+    args = get_args()
     main()
