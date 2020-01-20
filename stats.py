@@ -52,7 +52,6 @@ def further_analysis(language_stats, language_names,int2lang, language_names_dic
         sec_max = sorted(x)[-2][1]
         las = sorted(x)[0][1]
         num_char = language_stats[i]['num_characters']
-
         avg_char = round(sum(num_char) / len(num_char))
         print('Language: {}'.format(i))
         print('Total guesses: {}'.format(language_stats[i]['total_guesses']))

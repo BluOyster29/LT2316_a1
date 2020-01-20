@@ -105,7 +105,6 @@ def main(args):
         device = 'cuda:1'
     else:
         device = 'cpu'
-
     CONFIG['device'] = device
     config.update_config(CONFIG)
     vocab_size = len(get_vocab('vocab/{}{}'.format(args.model_name,'_vocab.pkl')))
@@ -124,6 +123,7 @@ def main(args):
     print('Outputting model to trained_model/{}.pt'.format(args.model_name))
     save_model(trained_model,batch_size,nr_of_epochs, args.model_name)
     return model
+
 if __name__ == '__main__':
     args = get_args()
     main(args)

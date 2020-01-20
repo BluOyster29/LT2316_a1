@@ -9,10 +9,6 @@ def get_args():
         description="")
     parser.add_argument("-M", "--trained_model", dest='model_name', type=str,
                         help="select trained model")
-    parser.add_argument("-T", "--test_data", dest='test_data', type=str, 
-                        help="test dataset")
-    parser.add_argument("-N", "--model_name", dest='model_name', type=str, 
-                        help="test dataset")
     args = parser.parse_args()
     return args
 

@@ -29,10 +29,13 @@ def get_languages(csv_file, preset):
                           "xho", "tet", "tha"]
         language_names = [(key, value) for key, value in language_table.items() if value in language_codes]
         return language_names
+    
     elif preset == 'n':
+        
         '''
         experimental function for allowing user to choose which languages to use
         '''
+        
         languages = []
         while len(languages) != 10:
             language = input("Enter language ").capitalize()
@@ -48,6 +51,7 @@ def get_languages(csv_file, preset):
                 continue
         language_codes = [language_table[i] for i in language_table if i in languages] #collects languages from predetermined set,
         language_names =  [(key, value) for key, value in language_table.items() if value in language_codes] #dictionary mapping code to name
+        print(language_names)
         return language_names
     else:
         print("has to be y or n dummy") #in case of user error
@@ -92,6 +96,7 @@ def main(args):
     #args = get_args()
     labels, x_test, x_train,y_test,y_train = get_files_from_folder(args.data)
     language_names = get_languages(labels, args.preset) #arg
+    print(language_names)
     language_codes = [i[1] for i in language_names]
     CONFIG['languages'] += language_names
     x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
@@ -102,4 +107,5 @@ def main(args):
     return x_train, y_train, vocab, int2char, x_test, y_test
 
 if __name__ == '__main__':
-    main()
+    args = get_args()
+    main(args)
