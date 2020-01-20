@@ -15,7 +15,7 @@ def get_args():
 
 def get_files_from_folder(folder):
     files = os.listdir(folder)
-    
+
     return folder+files[-1], folder+files[1], folder+files[2], folder+files[3], folder+files[4]
 
 def get_languages(csv_file, preset):
@@ -29,13 +29,13 @@ def get_languages(csv_file, preset):
                           "xho", "tet", "tha"]
         language_names = [(key, value) for key, value in language_table.items() if value in language_codes]
         return language_names
-    
+
     elif preset == 'n':
-        
+
         '''
         experimental function for allowing user to choose which languages to use
         '''
-        
+
         languages = []
         while len(languages) != 10:
             language = input("Enter language ").capitalize()
@@ -93,8 +93,8 @@ def output_data(x, y, filename):
 
 def main(args):
     CONFIG = config.gen_config('config/config.json')
-    #args = get_args()
     labels, x_test, x_train,y_test,y_train = get_files_from_folder(args.data)
+
     language_names = get_languages(labels, args.preset) #arg
     print(language_names)
     language_codes = [i[1] for i in language_names]

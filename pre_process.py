@@ -1,5 +1,5 @@
 import pandas as pd, csv
-import os, pickle, get_data, argparse, gzip, torch, config
+import os, pickle, argparse, gzip, torch, config
 from os import listdir
 from torch.nn.utils.rnn import pad_sequence
 from LangIdentDataset import RTDataset
@@ -251,6 +251,7 @@ def main(args):
     CONFIG = config.gen_config('config/config.json')
     labels, x_test, x_train,y_test,y_train = get_files_from_folder(args.data)
     language_names = get_languages(labels, args.preset)
+    print(language_names)
     language_codes = [i[1] for i in language_names]
     CONFIG['languages'] += language_names
     x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
