@@ -6,10 +6,10 @@ from LangIdentDataset import RTDataset
 from torch.utils.data import DataLoader
 
 def get_args():
-    
+
     parser = argparse.ArgumentParser(
         description="")
-    
+
     parser.add_argument("-P", "--preset", dest='preset', type=str,
                         help="Choose to use default language set or your own", default="y")
     parser.add_argument("-D", "--Data", dest='data', type=str, default="data/raw/",
@@ -20,19 +20,25 @@ def get_args():
                         help="Folder containing outputted csv files")
     parser.add_argument("-M", "--model_name", dest='model_name', type=str,
                         help='Create name for model')
-    
+
     args = parser.parse_args()
-    
+
     return args
 
 def get_files_from_folder(folder):
     files = os.listdir(folder)
-    
-    return folder+files[-1], folder+files[1], folder+files[2], folder+files[3], folder+files[4]
+    labels = folder + ''.join([i for i in files if i == 'labels.csv'])
+    x_test = folder + ''.join([i for i in files if i == 'x_test.txt'])
+    x_train = folder + ''.join([i for i in files if i == 'x_train.txt'])
+    y_test = folder + ''.join([i for i in files if i == 'y_test.txt'])
+    y_train = folder + ''.join([i for i in files if i == 'y_train.txt'])
+
+    return labels, x_test, x_train,y_test,y_train
 
 def get_languages(csv_file, preset):
     with open(csv_file, 'r') as csv_File: #opens csv containing language codes and their names
         reader = csv.reader(csv_File)
+
         language_table = {row[0].split(';')[1] : row[0].split(';')[0] for row in reader} #dictionary mapping code to name
     if preset == 'y':
         #Preset language codes to be used in model, chosen at random
@@ -41,13 +47,13 @@ def get_languages(csv_file, preset):
                           "xho", "tet", "tha"]
         language_names = [(key, value) for key, value in language_table.items() if value in language_codes]
         return language_names
-    
+
     elif preset == 'n':
-        
+
         '''
         experimental function for allowing user to choose which languages to use
         '''
-        
+
         languages = []
         while len(languages) != 10:
             language = input("Enter language ").capitalize()
