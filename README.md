@@ -2,27 +2,53 @@
 
 ## Language Identification using RNN by incrementally adding characters
 The repo contains the code for the above assignment given by Asad Sayeed of the University of Gothenburg machine learning course in the fall of 2019
-
+   
 ## Goal
 To correctly identify a language using the fewest characters possible 
 
+## Main Scripts  
+
+1. `pre_process.py`: This script allows the user to specify the languages or use a preset as well as choosing the batch size and naming the model
+   * Arguments:
+   * `-P`(y/n): Allows the user to choose preset or not (str)
+   * `-B`: Specify batch size (int)
+   * `-M`: Write a string to name the model (str)
+2. `train.py`: Script for training model 
+   * Arguments
+   * `-E`: Enter epochs for training (int)
+   * `-L`: Loss mode (int)
+      * `1`: Character length loss not applied
+      * `2`: Character length added to cross-entropy loss
+      * `3`: Character length multiplied with cross-entropy loss
+   * `-G` (y/n): Use GPU (str)
+   * `-M`: Enter model name for training (same as from pre_process.py)
+   
+3. `test.py`: Script for testing model and displaying stats
+   * `-M`: Enter model name for testing
+   
+### Helper Scripts 
+
+1. `config.py`: Creates a json file for keeping track of model meta data
+2. `GRUNetwork.py`: Pytorch class for generating RNN network
+3. `LangIdentDataset.py`: Pytorch inbuilt class for creating dataset to be fed to dataloader function
+4. `reset_outputs.py`: Script deletes all data created by the main functions. Acts as a clean reset. 
+5. `stats.py`: Function for processing statics
 ## Part 1: Data Preparation 
 
 ### Choosing Languages 
 Languages can either be loaded by defaul or the user can input their own, however they have to write them excactly how they are in the labels.csv (it is slightly buggy)
 The default languages are: 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+- English (eng)
+- Belarusian (Taraschkewiza, Be-Tarask) (Belarusian)
+- Karachay-Balkar (krc)
+- Maithili (mai)
+- Bokmål (nob)
+- Western Panjabi (pnb)
+- Sardinian (srd)
+- Tetum (tet)
+- Thai (tha)
+- Xhosa (xho)
 The default languages are a mixture of germanic, slavic and asian, I wanted to have some similar languages but also languages from different alphabets. 
-The training/testing outputs are outputting after pre-processing. 
 
 ### Pre-Processing 
 Once the languages have been split the program loads all the examples in the defined languages. These are then encoded using each character's index in the vocabulary.
