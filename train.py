@@ -85,19 +85,14 @@ def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size, los
                 loss = criterion(out, y.long())
             elif loss_mode == 2:
                 loss = criterion(out, y.long()) + num_chars
-                print('Just loss: {}'.format(criterion(out, y.long()).item()))
-                print('Num chars: {}'.format(num_chars))
-                print('total loss: {}'.format(loss.item()))
+    
             elif loss_mode == 3:
                 loss = criterion(out, y.long()) * num_chars
-                print('Just loss: {}'.format(criterion(out, y.long()).item()))
-                print('Num chars: {}'.format(num_chars))
-                print('total loss: {}'.format(loss.item()))
+
             loss.backward()
             epoch_loss.append(loss.item())
             optimizer.step()
-            break
-        break
+
         avg_loss = sum(epoch_loss) / len(epoch_loss)
         print("Average loss at epoch %d: %.7f" % (epoch_nr, avg_loss))
 
