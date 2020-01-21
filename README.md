@@ -74,3 +74,27 @@ The Model iterates through the test data and makes predictions, if the predictio
 
 ## Results 
 
+Below are tables from free testing instances
+1. Test 1: First test uses batching of 200, loss mode 1 trained over 10 epochs
+2. Test 2:
+3. Test 3:
+
+| Language  | Avg Number of chars | Accuracy  | Num Char |
+| --------- |-------------------- | --------- | ---------|
+| eng      | right-aligned | $1600 |
+| krc      | centered      |   $12 |
+| mai | are neat      |    $1 |
+| eng      | right-aligned | $1600 |
+| krc      | centered      |   $12 |
+| mai | are neat      |    $1 |
+
+English (eng)
+Belarusian (Taraschkewiza, Be-Tarask) (Belarusian)
+Marachay-Balkar (krc)
+- Maithili (mai)
+- Bokmål (nob)
+- Western Panjabi (pnb)
+- Sardinian (srd)
+- Tetum (tet)
+- Thai (tha)
+- Xhosa (xho)
