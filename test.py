@@ -4,7 +4,7 @@ from LangIdentDataset import RTDataset
 from tqdm import tqdm
 from GRUNetwork import RNN_GRU
 
-def get_args(): 
+def get_args():
     parser = argparse.ArgumentParser(
         description="")
     parser.add_argument("-M", "--trained_model", dest='model_name', type=str,
@@ -37,7 +37,7 @@ def get_vocab(path):
     return vocab
 
 def get_test_loader(path):
-    
+
     with open(path, 'rb') as file:
         testing_loader = pickle.load(file)
 
@@ -76,13 +76,11 @@ def test_model(trained_model, test_data, language_stats, device, language_names_
                 incorrect_guesses_per_instance += 1
                 continue
 
-  
-    
     print(example)
     print(correct_per_example)
     print(incorrect_guesses_per_instance)
     print(count)
-    
+
     return language_stats
 
 def main():

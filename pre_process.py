@@ -19,7 +19,7 @@ def get_args():
     parser.add_argument("-F", "--Folder", dest='folder', type=str, default="data/pre_processed/",
                         help="Folder containing outputted csv files")
     parser.add_argument("-M", "--model_name", dest='model_name', type=str,
-                        help='Create name for model')
+                        help='Create name for model', default='forgot_name')
 
     args = parser.parse_args()
 
@@ -99,14 +99,21 @@ def gen_data(training_file, training_labels, language_codes, training):
         y = [i[1] for i in sets if i[1] in language_codes] #labels for each of the sentences
         return x, y
 
-def output_data(x, y, filename):
+def output_data(x, y, text, labels):
     directory = 'data/pre_processed/'
-
+    txt = '.txt'
     if os.path.exists(directory) == False:
         os.mkdir(directory)
+    with open('{}{}{}'.format(directory,text,txt), 'w') as file:
+        for i in x:
+            file.write(i + '\n')
+    with open('{}{}{}'.format(directory,labels,txt), 'w') as file:
+        for i in y:
+            file.write(i +'\n')
+
 
     output = pd.DataFrame(data={'Language Example' : x, 'Language index' : y})
-    pd.DataFrame.to_csv(output, directory+filename)
+    pd.DataFrame.to_csv(output, directory+'Training.csv')
 
 def load_csv(file_path):
 
@@ -180,25 +187,6 @@ def build_data(x,y, lang2int,vocab):
 
     return pad_sequence(vectors, batch_first=True, padding_value=0), labels
 
-def output_postprocessed(train_dataset,test_dataset,model_name):
-
-    '''
-    Not really necessary, pd dataframes don't preserve datatype
-    '''
-
-    dir = 'data/postprocessed/'
-    if os.path.exists(dir) == False:
-        os.mkdir(dir)
-    directory = 'data/postprocessed/'
-    if os.path.exists(directory) == False:
-        os.mkdir(directory)
-
-    pd.DataFrame.to_csv(pd.DataFrame({'Encoded Language Example' : [i[0] for i in train_dataset],
-                           'Language Index' : [i[1] for i in train_dataset]}), 'data/postprocessed/{}_post_processed_training.csv'.format(model_name))
-
-    pd.DataFrame.to_csv(pd.DataFrame({'Encoded Language Example' : [i[0] for i in test_dataset],
-                           'Language Index' : [i[1] for i in test_dataset]}),'data/postprocessed/{}_post_processed_testing.csv'.format(model_name))
-
 def output_dataloaders(loaders, model_name):
 
     '''''
@@ -256,14 +244,13 @@ def main(args):
     CONFIG['languages'] += language_names
     x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
     x_test, y_test = gen_data(x_test, y_test, language_codes, training=False)
-    output_data(x_train,y_train, 'Training_data.csv')
-    output_data(x_test,y_test, 'Testing_data.csv')
+
     config.update_config(CONFIG)
     directory = 'data/pre_processed/'
     if os.path.exists(directory) == False:
         os.mkdir(directory)
     print('Loading Csvs')
-    x_train, y_train, x_test, y_test, language_codes = load_csv(args.folder)
+    #x_train, y_train, x_test, y_test, language_codes = load_csv(args.folder)
     print('Building Vocab')
     vocab = build_vocab(x_train)
     output_vocab(vocab, args.model_name)
@@ -272,6 +259,8 @@ def main(args):
     train_data, train_labels = build_data(x_train, y_train, lang2int, vocab)
     print('Preprocessing testing data')
     test_data, test_labels = build_data(x_test, y_test, lang2int, vocab)
+    output_data(x_train,y_train, 'x_train', 'y_train')
+    output_data(x_train,y_train, 'x_test', 'y_test')
     train_dataset = RTDataset(train_data, train_labels)
     test_dataset = RTDataset(test_data, test_labels)
     CONFIG = config.get_config('config/config.json')

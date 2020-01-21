@@ -1,4 +1,4 @@
-import get_data, pre_process, config, GRUNetwork
+import pre_process, config, GRUNetwork
 import stats, train, test, argparse
 
 def get_args():
@@ -18,7 +18,7 @@ def get_args():
                         help='Choose loss mode', default="1")
     parser.add_argument("-M", "--model_name", dest='model_name', type=str,
                         help='Create name for model')
-    
+
     args = parser.parse_args()
     return args
 
