@@ -39,16 +39,17 @@ To correctly identify a language using the fewest characters possible
 Languages can either be loaded by defaul or the user can input their own, however they have to write them excactly how they are in the labels.csv (it is slightly buggy)
 The default languages are: 
 - English (eng)
-- Belarusian (Taraschkewiza, Be-Tarask) (Belarusian)
-- Karachay-Balkar (krc)
-- Maithili (mai)
-- Bokmål (nob)
-- Western Panjabi (pnb)
-- Sardinian (srd)
-- Tetum (tet)
-- Thai (tha)
-- Xhosa (xho)
-The default languages are a mixture of germanic, slavic and asian, I wanted to have some similar languages but also languages from different alphabets. 
+- Czech
+- Welsh
+- Hindi
+- Japanese
+- Polish
+- Russian
+- Slovak
+- Swedish
+- Ukrainian
+
+The default languages are a mixture of celtic,germanic, slavic and asian, I wanted to have some similar languages but also languages from different alphabets. 
 
 ### Pre-Processing 
 Once the languages have been split the program loads all the examples in the defined languages. These are then encoded using each character's index in the vocabulary.
@@ -79,22 +80,50 @@ Below are tables from free testing instances
 2. Test 2:
 3. Test 3:
 
-| Language  | Avg Number of chars | Accuracy  | Num Char |
-| --------- |-------------------- | --------- | ---------|
-| eng      | right-aligned | $1600 |
-| krc      | centered      |   $12 |
-| mai | are neat      |    $1 |
-| eng      | right-aligned | $1600 |
-| krc      | centered      |   $12 |
-| mai | are neat      |    $1 |
+### Test 1
 
-English (eng)
-Belarusian (Taraschkewiza, Be-Tarask) (Belarusian)
-Marachay-Balkar (krc)
-- Maithili (mai)
-- Bokmål (nob)
-- Western Panjabi (pnb)
-- Sardinian (srd)
-- Tetum (tet)
-- Thai (tha)
-- Xhosa (xho)
+| Language  | Correct | Incorrect | Num Examples | Avg Chars | Accuracy |
+|-----------|---------|-----------|--------------|-----------|----------|
+| English   |   469   |     31    |      500     |     5     |   93.8   |
+| Czech     |   481   |     19    |      500     |     4     |   96.2   |
+| Welsh     |   489   |     11    |      500     |     7     |   97.8   |
+| Hindi     |   490   |     10    |      500     |     2     |    98    |
+| Japanese  |   496   |     4     |      500     |     2     |   99.2   |
+| Polish    |   498   |     2     |      500     |     6     |   99.6   |
+| Russian   |   493   |     7     |      500     |     1     |   98.6   |
+| Slovak    |   499   |     1     |      500     |     5     |   99.8   |
+| Swedish   |   434   |     66    |      500     |     9     |   86.8   |
+| Ukrainian |   492   |     8     |      500     |     1     |   98.4   |
+
+### Test 2
+
+| Language  | Correct | Incorrect | Num Examples | Avg Chars | Accuracy |
+|-----------|---------|-----------|--------------|-----------|----------|
+| English   |   492   |     8     |      500     |     1     |   98.4   |
+| Czech     |   491   |     9     |      500     |     4     |   98.2   |
+| Welsh     |   490   |     10    |      500     |     7     |    98    |
+| Hindi     |   500   |     0     |      500     |     3     |    100   |
+| Japanese  |   475   |     25    |      500     |     9     |   95.0   |
+| Polish    |   498   |    496    |      500     |     3     |   99.4   |
+| Russian   |   486   |     14    |      500     |     2     |   97.2   |
+| Slovak    |   493   |     7     |      500     |     2     |   98.6   |
+| Swedish   |   457   |     43    |      500     |     10    |   91.4   |
+| Ukrainian |   488   |     12    |      500     |     3     |   97.6   |
+
+### Test 3
+
+| Language  | Correct | Incorrect | Num Examples | Avg Chars | Accuracy |
+|-----------|---------|-----------|--------------|-----------|----------|
+| English   |   489   |     11    |      500     |     3     |   97.8   |
+| Czech     |   493   |     7     |      500     |     7     |   98.6   |
+| Welsh     |   493   |     7     |      500     |     2     |   98.6   |
+| Hindi     |   492   |     8     |      500     |     2     |   98.4   |
+| Japanese  |   477   |     23    |      500     |     9     |   95.4   |
+| Polish    |   478   |     22    |      500     |     11    |   95.6   |
+| Russian   |   492   |     8     |      500     |     1     |   98.4   |
+| Slovak    |   489   |     11    |      500     |     4     |   97.8   |
+| Swedish   |   484   |     16    |      500     |     6     |   96.8   |
+| Ukrainian |   493   |     17    |      500     |     1     |   98.6   |
+
+### Results
+
