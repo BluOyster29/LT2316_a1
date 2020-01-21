@@ -257,7 +257,7 @@ def main(args):
     x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
     x_test, y_test = gen_data(x_test, y_test, language_codes, training=False)
     output_data(x_train,y_train, 'Training_data.csv')
-    output_data(x_train,y_train, 'Testing_data.csv')
+    output_data(x_test,y_test, 'Testing_data.csv')
     config.update_config(CONFIG)
     directory = 'data/pre_processed/'
     if os.path.exists(directory) == False:
