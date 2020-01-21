@@ -54,12 +54,14 @@ def further_analysis(language_stats, language_names,int2lang, language_names_dic
         num_char = language_stats[i]['num_characters']
         avg_char = round(sum(num_char) / len(num_char))
         print('Language: {}'.format(i))
-        print('Total guesses: {}'.format(language_stats[i]['total_guesses']))
+        #print('Total guesses: {}'.format(language_stats[i]['total_guesses']))
         print('Total correct: {}'.format(language_stats[i]['correct_guesses']))
-        print('Total accuracy for {}: {}%'.format(i,str(round(language_stats[i]['correct_guesses']/ language_stats[i]['total_guesses'] * 100,2))))
-        print('Languages Guessed: {}'.format(dict(Counter(lang_guessed))))
-        print('Most incorrectly guessed: {}'.format(sec_max))
-        print('Least incorrectly guessed: {}'.format(las))
+        print('Total incorrect: {}'.format(language_stats[i]['incorrect_guesses']))
+        print('Total accuracy for {}: {}%'.format(i,str(round(language_stats[i]['correct_guesses']/ 500 * 100,2))))
+
+        #print('Languages Guessed: {}'.format(dict(Counter(lang_guessed))))
+        #print('Most incorrectly guessed: {}'.format(sec_max))
+        #print('Least incorrectly guessed: {}'.format(las))
         print('Average characters until correct guess: {}'.format(avg_char))
         print('\n')
         '''data = {'language'      : i,
