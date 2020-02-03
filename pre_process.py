@@ -239,7 +239,7 @@ def main(args):
     CONFIG = config.gen_config('config/config.json')
     labels, x_test, x_train,y_test,y_train = get_files_from_folder(args.data)
     language_names = get_languages(labels, args.preset)
-    print(language_names)
+    print('Chosen Languages: {}'.format('\n'.join([i[0] for i in language_names])))
     language_codes = [i[1] for i in language_names]
     CONFIG['languages'] += language_names
     x_train, y_train, vocab, int2char = gen_data(x_train, y_train, language_codes, training=True)
