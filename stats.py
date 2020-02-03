@@ -56,28 +56,14 @@ def further_analysis(language_stats, language_names,int2lang, language_names_dic
         print('Language: {}'.format(i))
         #print('Total guesses: {}'.format(language_stats[i]['total_guesses']))
         print('Total correct: {}'.format(language_stats[i]['correct_guesses']))
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        print('Total incorrect: {}'.format(language_stats[i]['incorrect_guesses']))
+        print('Total incorrect: {}'.format((500 - language_stats[i]['correct_guesses'])))
+        
         print('Total accuracy for {}: {}%'.format(i,str(round(language_stats[i]['correct_guesses']/ 500 * 100,2))))
-
-=======
-        print('Total accuracy for {}: {}%'.format(i,str(round(language_stats[i]['correct_guesses']/ language_stats[i]['incorrect_guesses'] * 100,2))))
->>>>>>> Stashed changes
-=======
-        print('Total incorrect: {}'.format(language_stats[i]['incorrect_guesses']))
-        print('Total accuracy for {}: {}%'.format(i,str(round(language_stats[i]['correct_guesses']/ 500 * 100,2))))
-
->>>>>>> b84ebb78d7aa6986346ca5f005c7a721e448e81a
+   
         #print('Languages Guessed: {}'.format(dict(Counter(lang_guessed))))
         #print('Most incorrectly guessed: {}'.format(sec_max))
         #print('Least incorrectly guessed: {}'.format(las))
         print('Average characters until correct guess: {}'.format(avg_char))
         print('\n')
-        '''data = {'language'      : i,
-                'total_guesses' : language_stats[i]['total_guesses'],
-                'total_correct' : language_stats[i]['correct_guesses'],
-                'accuracy'      :  str(round(language_stats[i]['correct_guesses']/ language_stats[i]['total guesses'] * 100,2)),
-                'languages_guessed' : dict(Counter(lang_guessed))}'''
+    
 
-    def basic_stats(language_stats, language_names,int2lang, language_names_dict):

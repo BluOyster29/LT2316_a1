@@ -55,7 +55,6 @@ def get_vocab(path):
     return vocab
 
 def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size, loss_mode):
-
     criterion = nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=0.001)
     model.train()
@@ -78,9 +77,7 @@ def train(model, train_loader, vocab_size, device, nr_of_epochs, batch_size, los
             optimizer.zero_grad()
             h = h.data
             out, h = model(x, h)
-            print(x)
             num_chars = len(torch.nonzero(out))
-            print(num_chars)
             if loss_mode == 1:
                 loss = criterion(out, y.long())
             elif loss_mode == 2:
