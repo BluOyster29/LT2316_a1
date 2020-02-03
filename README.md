@@ -125,5 +125,4 @@ Below are tables from free testing instances
 | Swedish   |   484   |     16    |      500     |     6     |   96.8   |
 | Ukrainian |   493   |     17    |      500     |     1     |   98.6   |
 
-### Results
 
