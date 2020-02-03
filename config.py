@@ -2,6 +2,11 @@ import torch, json, os
 
 def gen_config(path):
 
+    directory = 'config/'
+    
+    if os.path.exists(directory) == False:
+        os.mkdir(directory)
+    
     EMPTY_CONFIG = {'vocab_size'     : int(),
                'sequence_length' : 100,
                'batch_size'      : 1,
